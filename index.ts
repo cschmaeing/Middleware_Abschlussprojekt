@@ -4,8 +4,8 @@ import request from 'request';
 import bodyParser from 'body-parser';
 
 const app = express();
-const userName = 'CSCHMAEING';
-const password = 'Taunusstein';
+const userName = 'No';
+const password = 'No';
 const auth = btoa(userName + ":" + password);
 
 let csrfToken: string = "";
