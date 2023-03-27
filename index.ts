@@ -25,9 +25,9 @@ app.get('/test', (req, res) => {
 
 app.get('/authUser', (req, res) => {
     const options = {
-        url: `http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/StandardSchulungenSet$format=json`,
+        url: 'http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/standardSchulungenSet?$format=json',
         headers: {
-            'Authorization': 'Basic' + auth,
+            'Authorization': 'Basic ' + auth,
             'x-csrf-token': 'fetch'
         }
     }
