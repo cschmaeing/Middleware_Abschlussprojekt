@@ -9,8 +9,8 @@ const request_1 = __importDefault(require("request"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const Seminar_1 = require("./Seminar");
 const app = (0, express_1.default)();
-const userName = 'CSCHMAEING';
-const password = 'Taunusstein';
+const userName = 'blabla';
+const password = 'blabla';
 const auth = btoa(userName + ":" + password);
 let csrfToken = "";
 let cookies = [];
@@ -39,8 +39,7 @@ app.get('/authUser', (req, res) => {
         }
     });
 });
-
-app.get('/getAllSeminar', (req, res) => {
+app.get('getAllSeminar', (req, res) => {
     const options = {
         url: 'http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/standardSchulungenSet?$format=json',
         headers: {
@@ -51,9 +50,9 @@ app.get('/getAllSeminar', (req, res) => {
     request.get(options, (err, response) => {
         const body = JSON.parse(response.body);
         const seminars = [];
+        console.log("Hier...");
         body.d.results.forEach(seminar => {
-            seminars.push(new Seminar(seminar.mandant, seminar.ident_nr, seminar.title, seminar.typ, seminar.thema, 
-                seminar.beschr, seminar.tage, seminar.adressat, seminar.an_patr, seminar.status));
+            seminars.push(new Seminar_1.Seminar(seminar.mandant, seminar.ident_nr, seminar.title, seminar.typ, seminar.thema, seminar.beschr, seminar.tage, seminar.adressat, seminar.an_patr, seminar.status));
         });
         res.send(JSON.stringify(seminars));
     });
