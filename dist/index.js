@@ -9,8 +9,10 @@ const request_1 = __importDefault(require("request"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const Seminar_1 = require("./Seminar");
 const app = (0, express_1.default)();
+
 const userName = 'blabla';
 const password = 'blabla';
+
 const auth = btoa(userName + ":" + password);
 let csrfToken = "";
 let cookies = [];
