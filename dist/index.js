@@ -9,10 +9,8 @@ const request_1 = __importDefault(require("request"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const Seminar_1 = require("./Seminar");
 const app = (0, express_1.default)();
-
-const userName = 'blabla';
-const password = 'blabla';
-
+const userName = 'CSCHMAEING';
+const password = 'Taunusstein';
 const auth = btoa(userName + ":" + password);
 let csrfToken = "";
 let cookies = [];
@@ -33,7 +31,7 @@ app.get('/authUser', (req, res) => {
             'x-csrf-token': 'fetch'
         }
     };
-    request_1.default.get(options, (err, response, body) => {
+    request.get(options, (err, response, body) => {
         console.log('response --> ', response);
         if (response.headers['x-csrf-token']) {
             csrfToken = response.headers['x-csrf-token'];
@@ -41,7 +39,8 @@ app.get('/authUser', (req, res) => {
         }
     });
 });
-app.get('getAllSeminar', (req, res) => {
+
+app.get('/getAllSeminar', (req, res) => {
     const options = {
         url: 'http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/standardSchulungenSet?$format=json',
         headers: {
@@ -49,14 +48,17 @@ app.get('getAllSeminar', (req, res) => {
             'cookie': cookies
         }
     };
-    request_1.default.get(options, (err, response) => {
+    request.get(options, (err, response) => {
         const body = JSON.parse(response.body);
         const seminars = [];
         body.d.results.forEach(seminar => {
-            seminars.push(new Seminar_1.Seminar(seminar.mandant, seminar.ident_nr, seminar.title, seminar.typ, seminar.thema, seminar.beschr, seminar.tage, seminar.adressat, seminar.an_patr, seminar.status));
+            seminars.push(new Seminar(seminar.mandant, seminar.ident_nr, seminar.title, seminar.typ, seminar.thema, 
+                seminar.beschr, seminar.tage, seminar.adressat, seminar.an_patr, seminar.status));
         });
         res.send(JSON.stringify(seminars));
     });
 });
+
+
 app.listen(port, () => console.log("Listening on Port", port));
 //# sourceMappingURL=index.js.map

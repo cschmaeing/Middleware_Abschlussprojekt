@@ -6,8 +6,8 @@ import { Seminar } from './Seminar';
 
 
 const app = express();
-const userName = 'blabla';
-const password = 'blabla';
+const userName = 'CSCHMAEING';
+const password = 'Taunusstein';
 const auth = btoa(userName + ":" + password);
 
 let csrfToken: string = "";
