@@ -2,10 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import request from 'request';
 import bodyParser from 'body-parser';
+import { Seminar } from './Seminar';
+
 
 const app = express();
-const userName = 'No';
-const password = 'No';
+const userName = 'blabla';
+const password = 'blabla';
 const auth = btoa(userName + ":" + password);
 
 let csrfToken: string = "";
@@ -25,32 +27,44 @@ app.get('/test', (req, res) => {
 
 app.get('/authUser', (req, res) => {
     const options = {
-        url: `http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/StandardSchulungenSet$format=json`,
+        url: 'http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/standardSchulungenSet?$format=json',
         headers: {
-            'Authorization': 'Basic' + auth,
+            'Authorization': 'Basic ' + auth,
             'x-csrf-token': 'fetch'
         }
     }
 
     request.get(options, (err, response, body) => {
-        console.log('response -->  ', response)
+        console.log('response --> ', response)
         if (response.headers['x-csrf-token']) {
-
-            // Dieses Token ist in der Response nicht zu finden
             csrfToken = response.headers['x-csrf-token'] as string;
-
-            // Das hier schon 
             cookies = response.headers['set-cookie'] as Array<string>
-
-            res.send({ token: csrfToken, cookies: cookies })
         }
-        if (err) {
-            console.error(err)
-        }
-
-
     }
     )
+
 })
+
+app.get('getAllSeminar', (req, res) => {
+    const options = {
+        url: 'http://ibssapdos.sap.ibs-banking.com:8000/sap/opu/odata/IBS/DIN_SCHULUNG_SRV/standardSchulungenSet?$format=json',
+        headers: {
+            'x-crsf-token': csrfToken,
+            'cookie': cookies
+        }
+    }
+
+    request.get(options, (err, response) => {
+        const body = JSON.parse(response.body)
+        const seminars: Seminar[] = [];
+
+        body.d.results.forEach(seminar => {
+            seminars.push(new Seminar(seminar.mandant, seminar.ident_nr, seminar.title, seminar.typ, seminar.thema, seminar.beschr, seminar.tage, seminar.adressat, seminar.an_patr, seminar.status))
+        });
+        res.send(JSON.stringify(seminars))
+    })
+})
+
+
 
 app.listen(port, () => console.log("Listening on Port", port))
